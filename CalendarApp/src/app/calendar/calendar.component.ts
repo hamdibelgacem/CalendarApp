@@ -31,7 +31,23 @@ export class CalendarComponent implements OnInit {
     this.showCalendar(this.currentMonth, this.currentYear);
   }
 
+  /**
+   * @description: function get the pervious month.
+   */
+  perviousMonth(){
+    this.currentYear = (this.currentMonth === 0) ? this.currentYear - 1 : this.currentYear;
+    this.currentMonth = (this.currentMonth === 0) ? 11 : this.currentMonth-1;
+    this.showCalendar(this.currentMonth, this.currentYear);
+  }
 
+  /**
+   * @description: function get the next month.
+   */
+  nextMonth(){
+    this.currentYear = (this.currentMonth === 11) ? this.currentYear + 1 : this.currentYear;
+    this.currentMonth = (this.currentMonth + 1) % 12;
+    this.showCalendar(this.currentMonth, this.currentYear);
+  }
 
   showCalendar(month, year) {
     let monthAndYear = document.getElementById("monthAndYear");
