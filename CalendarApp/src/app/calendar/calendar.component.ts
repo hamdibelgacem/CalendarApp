@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./calendar.component.css']
 })
 export class CalendarComponent implements OnInit {
-  days = [
+  week = [
     "Sunday", "Monday","Tuesday",
     "Wednesday", "Thursday", 
     "Friday", "Saturday"];
@@ -15,12 +15,19 @@ export class CalendarComponent implements OnInit {
     "July", "August", "September", "October", "November", "December"];
   
   today = new Date();
+  days = [];
+  week1 = [];
+  week2 = [];
+  week3 = [];
+  week4 = [];
+  week5 = [];
+  week6 = [];
   currentMonth = this.today.getMonth();
   currentYear = this.today.getFullYear();
+  firstDay = (new Date(this.currentYear, this.currentMonth)).getDay();
+  daysInMonth = 32 - new Date(this.currentYear, this.currentMonth, 32).getDate();
 
-  selectYear = document.getElementById("year");
-  selectMonth = document.getElementById("month");
-
+  clickedDate: Date;
   constructor() {
     console.log(this.currentMonth);
     console.log(this.currentYear);
@@ -28,13 +35,14 @@ export class CalendarComponent implements OnInit {
     
   }
   ngOnInit() {
-    this.showCalendar(this.currentMonth, this.currentYear);
+    this.showCalendar(6, 2019);  
   }
 
   /**
    * @description: function get the pervious month.
    */
   perviousMonth(){
+    this.emptyObjects();
     this.currentYear = (this.currentMonth === 0) ? this.currentYear - 1 : this.currentYear;
     this.currentMonth = (this.currentMonth === 0) ? 11 : this.currentMonth-1;
     this.showCalendar(this.currentMonth, this.currentYear);
@@ -44,62 +52,77 @@ export class CalendarComponent implements OnInit {
    * @description: function get the next month.
    */
   nextMonth(){
+    this.emptyObjects();
     this.currentYear = (this.currentMonth === 11) ? this.currentYear + 1 : this.currentYear;
     this.currentMonth = (this.currentMonth + 1) % 12;
     this.showCalendar(this.currentMonth, this.currentYear);
   }
 
-  showCalendar(month, year) {
-    let monthAndYear = document.getElementById("monthAndYear");
 
+  onClickedDate() {
+
+  }
+
+  divideIntoWeek() {
+    for (let i = 0; i < 42; i++) {
+      let week = Math.floor(i / 7);
+
+      switch (week) {
+        case 0:
+          this.week1.push(this.days[i]);
+          break;
+        case 1:
+          this.week2.push(this.days[i]);
+          break;
+        case 2:
+          this.week3.push(this.days[i]);
+          break;
+        case 3:
+          this.week4.push(this.days[i]);
+          break;
+        case 4:
+          this.week5.push(this.days[i]);
+          break;
+        case 5:
+          this.week6.push(this.days[i]);
+      }
+    }
+    console.log(this.week1,this.week2,this.week3,this.week4,this.week5,this.week6);
+  }
+
+  emptyObjects(){
+    this.days=[];
+    this.week1=[];
+    this.week2=[];
+    this.week3=[];
+    this.week4=[];
+    this.week5=[];
+    this.week6=[];
+   }
+ 
+  showCalendar(month, year) {
     let firstDay = (new Date(year, month)).getDay();
     let daysInMonth = 32 - new Date(year, month, 32).getDate();
 
-    let tbl = document.getElementById("calendar-body"); // body of the calendar
-
-    // clearing all previous cells
-    tbl.innerHTML = "";
-
-    // filing data about month and in the page via DOM.
-    monthAndYear.innerHTML = this.months[month] + " " + year;
-    //this.selectYear.value = year;
-    //this.selectMonth.value = month;
-
-    // creating all cells
+    
     let date = 1;
     for (let i = 0; i < 6; i++) {
-        // creates a table row
-        let row = document.createElement("tr");
-
-        //creating individual cells, filing them up with data.
         for (let j = 0; j < 7; j++) {
             if (i === 0 && j < firstDay) {
-                let cell = document.createElement("td");
-                let cellText = document.createTextNode("");
-                cell.appendChild(cellText);
-                row.appendChild(cell);
+              this.days.push("");
             }
             else if (date > daysInMonth) {
                 break;
             }
-
             else {
-                let cell = document.createElement("td");
-                let cellText = document.createTextNode(date.toString());
-                if (date === this.today.getDate() && year === this.today.getFullYear() && month === this.today.getMonth()) {
-                    cell.classList.add("bg-info");
-                } // color today's date
-                cell.appendChild(cellText);
-                row.appendChild(cell);
-                date++;
+              this.days.push(date);
+              date++;
             }
 
 
         }
-
-        tbl.appendChild(row); // appending each row into calendar body.
     }
-
+    this.divideIntoWeek();
   }
 
 }
