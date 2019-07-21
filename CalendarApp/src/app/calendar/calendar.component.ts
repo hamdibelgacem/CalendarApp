@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSelectModule} from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TaskData } from '../TaskData';
+
+// import modal component
+import { ModalComponent } from '../modal/modal.component';
+
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -8,12 +15,12 @@ import { Component, OnInit } from '@angular/core';
 export class CalendarComponent implements OnInit {
   week = [
     "Sunday", "Monday","Tuesday",
-    "Wednesday", "Thursday", 
+    "Wednesday", "Thursday",
     "Friday", "Saturday"];
   months = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"];
-  
+
   today = new Date();
   days = [];
   week1 = [];
@@ -27,15 +34,23 @@ export class CalendarComponent implements OnInit {
   firstDay = (new Date(this.currentYear, this.currentMonth)).getDay();
   daysInMonth = 32 - new Date(this.currentYear, this.currentMonth, 32).getDate();
 
-  clickedDate: Date;
-  constructor() {
-    console.log(this.currentMonth);
-    console.log(this.currentYear);
+  constructor(public dialog: MatDialog) {}
 
-    
-  }
   ngOnInit() {
-    this.showCalendar(6, 2019);  
+    this.showCalendar(this.currentMonth, this.currentYear);
+  }
+
+  openModal(day): void {
+    const dialogRef = this.dialog.open(ModalComponent, {
+      hasBackdrop: true,
+      disableClose: false,
+      width: '500px',
+      data: {currentMonth: this.currentMonth, currentYear: this.currentYear, currentDay: day }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      //console.log(result);
+    });
   }
 
   /**
@@ -56,15 +71,12 @@ export class CalendarComponent implements OnInit {
     this.currentYear = (this.currentMonth === 11) ? this.currentYear + 1 : this.currentYear;
     this.currentMonth = (this.currentMonth + 1) % 12;
     this.showCalendar(this.currentMonth, this.currentYear);
-  }
-
-
-  onClickedDate() {
-
+    console.log(this.week6)
+    console.log(this.week5)
   }
 
   divideIntoWeek() {
-    for (let i = 0; i < 42; i++) {
+    for (let i = 0; i < this.daysInMonth; i++) {
       let week = Math.floor(i / 7);
 
       switch (week) {
@@ -87,7 +99,6 @@ export class CalendarComponent implements OnInit {
           this.week6.push(this.days[i]);
       }
     }
-    console.log(this.week1,this.week2,this.week3,this.week4,this.week5,this.week6);
   }
 
   emptyObjects(){
@@ -99,17 +110,16 @@ export class CalendarComponent implements OnInit {
     this.week5=[];
     this.week6=[];
    }
- 
+
   showCalendar(month, year) {
     let firstDay = (new Date(year, month)).getDay();
     let daysInMonth = 32 - new Date(year, month, 32).getDate();
 
-    
     let date = 1;
     for (let i = 0; i < 6; i++) {
         for (let j = 0; j < 7; j++) {
             if (i === 0 && j < firstDay) {
-              this.days.push("");
+              this.days.push(null);
             }
             else if (date > daysInMonth) {
                 break;
@@ -118,11 +128,8 @@ export class CalendarComponent implements OnInit {
               this.days.push(date);
               date++;
             }
-
-
         }
     }
     this.divideIntoWeek();
   }
-
 }
