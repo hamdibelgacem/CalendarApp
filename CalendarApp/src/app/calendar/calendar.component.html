@@ -1,10 +1,9 @@
-<div class="form-inline">
-  <button class="btn btn-outline-primary col-sm-1" id="previous" (click)="perviousMonth()">Previous</button>
-  <button class="btn btn-outline-primary col-sm-1" id="next" (click)="nextMonth()">Next</button>
-</div>
-
 <div class="container">
   <h3 id="monthAndYear">{{months[currentMonth]}} {{currentYear}}</h3>
+  <div class="form-inline">
+    <button class="btn btn-outline-primary col-sm-1" id="previous" (click)="perviousMonth()">Previous</button>
+    <button class="btn btn-outline-primary col-sm-1" id="next" (click)="nextMonth()">Next</button>
+  </div>
   <div class="card">
     <table class="table table-bordered" id="calendar">
         <thead>

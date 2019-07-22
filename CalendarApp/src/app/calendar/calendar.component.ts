@@ -71,12 +71,10 @@ export class CalendarComponent implements OnInit {
     this.currentYear = (this.currentMonth === 11) ? this.currentYear + 1 : this.currentYear;
     this.currentMonth = (this.currentMonth + 1) % 12;
     this.showCalendar(this.currentMonth, this.currentYear);
-    console.log(this.week6)
-    console.log(this.week5)
   }
 
   divideIntoWeek() {
-    for (let i = 0; i < this.daysInMonth; i++) {
+    for (let i = 0; i < 42; i++) {
       let week = Math.floor(i / 7);
 
       switch (week) {
