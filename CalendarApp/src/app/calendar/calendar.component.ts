@@ -40,7 +40,7 @@ export class CalendarComponent implements OnInit {
     this.showCalendar(this.currentMonth, this.currentYear);
   }
 
-  openModal(day): void {
+ /* openModal(day): void {
     const dialogRef = this.dialog.open(ModalComponent, {
       hasBackdrop: true,
       disableClose: false,
@@ -52,7 +52,12 @@ export class CalendarComponent implements OnInit {
       //console.log(result);
     });
   }
-
+*/
+  
+  openModal(day): void{
+    alert("I will fix this modal ASAP!");
+  }
+  
   /**
    * @description: function get the pervious month.
    */
